@@ -8,8 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/954alberto/valydar.git",
-    "directory": "sdk"
+    "url": "git+https://github.com/valydar/sdk.git"
   },
   "keywords": ["identity", "verification", "kyc", "aml", "biometrics"]
 }
