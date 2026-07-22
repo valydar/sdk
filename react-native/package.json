@@ -1,0 +1,27 @@
+{
+  "name": "@valydar/react-native",
+  "version": "0.1.0",
+  "description": "Valydar Identity Verification SDK for React Native",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-native": ">=0.70.0",
+    "react-native-vision-camera": ">=4.0.0",
+    "react-native-document-scanner": "^1.0.0"
+  },
+  "dependencies": {
+    "react-native-mmkv": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["valydar", "identity", "verification", "kyc", "document", "liveness"],
+  "license": "MIT"
+}

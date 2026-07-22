@@ -1,0 +1,15 @@
+{
+  "name": "@valydar/web-sdk",
+  "version": "0.1.0",
+  "description": "Valydar Web SDK — identity verification for browsers",
+  "main": "valydar.js",
+  "types": "valydar.d.ts",
+  "files": ["valydar.js", "valydar.d.ts", "idv-widget.js", "document-capture.js", "selfie-capture.js"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/954alberto/valydar.git",
+    "directory": "sdk"
+  },
+  "keywords": ["identity", "verification", "kyc", "aml", "biometrics"]
+}

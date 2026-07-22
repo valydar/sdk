@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Valydar — Full Feature Demo</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Inter",sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.5}
+    .top{background:#1e293b;border-bottom:1px solid #334155;padding:16px 24px;display:flex;align-items:center;gap:12px}
+    .top h1{font-size:18px;font-weight:700;color:#f8fafc}
+    .top span{font-size:12px;color:#94a3b8;background:#334155;padding:2px 8px;border-radius:4px}
+    .top .badge{background:#6366f1;color:#fff;font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;margin-left:auto}
+    .layout{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    @media(max-width:768px){.layout{grid-template-columns:1fr}}
+    .cfg{grid-column:1/-1;background:#1e293b;border-radius:12px;padding:20px;display:flex;gap:16px;align-items:end;flex-wrap:wrap;border:1px solid #334155}
+    .cfg label{font-size:12px;font-weight:600;color:#94a3b8;display:block;margin-bottom:4px}
+    .cfg input{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 12px;color:#e2e8f0;font-size:13px;width:280px}
+    .cfg input:focus{outline:none;border-color:#6366f1}
+    .cfg .btn{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+    .cfg .btn:hover{background:#4f46e5}
+    .card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #334155}
+    .card h2{font-size:14px;font-weight:600;color:#f8fafc;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .card h2 .icon{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+    .card p{font-size:13px;color:#94a3b8;margin-bottom:16px}
+    .card .btn{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+    .card .btn:hover{background:#4f46e5}
+    .card .btn:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+    .card .btn-sm{padding:6px 12px;font-size:11px}
+    .card .btn-success{background:#22c55e}
+    .card .btn-success:hover{background:#16a34a}
+    .card .btn-danger{background:#ef4444}
+    .card .btn-danger:hover{background:#dc2626}
+    .card .btn-outline{background:transparent;border:1px solid #334155;color:#94a3b8}
+    .card .btn-outline:hover{border-color:#6366f1;color:#e2e8f0}
+    .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+    .tag-green{background:#052e16;color:#86efac}
+    .tag-red{background:#450a0a;color:#fca5a5}
+    .tag-yellow{background:#451a03;color:#fdba74}
+    .tag-blue{background:#1e1b4b;color:#a5b4fc}
+    .log{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:400px;overflow-y:auto;white-space:pre-wrap;color:#a5f3fc;margin-top:12px}
+    .log .dim{color:#475569}
+    .log .ok{color:#86efac}
+    .log .err{color:#fca5a5}
+    .log .hl{color:#c4b5fd}
+    .dump{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:200px;overflow-y:auto;white-space:pre-wrap;color:#a5f3fc;margin-top:8px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    input[type="text"],input[type="password"],select{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:6px 10px;color:#e2e8f0;font-size:12px;width:100%}
+    select{width:auto}
+    input:focus,select:focus{outline:none;border-color:#6366f1}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+    .stat{display:flex;justify-content:space-between;padding:8px 12px;background:#0f172a;border-radius:6px;font-size:12px}
+    .stat .val{font-weight:600;color:#f8fafc}
+    .warn{background:#451a03;border:1px solid #78350f;border-radius:6px;padding:8px 12px;font-size:11px;color:#fdba74;margin-bottom:12px}
+    .res{display:none;margin-top:12px}
+    .res.show{display:block}
+  </style>
+</head>
+<body>
+<div class="top">
+  <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#6366f1"/><path d="M8 16l5 5 11-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h1>Valydar <span>Full Feature Demo</span></h1>
+  <span class="badge">v0.1.0</span>
+</div>
+
+<div class="layout">
+  <div class="cfg">
+    <div><label>API URL</label><input id="api-url" value="https://api.dev.valydar.com"></div>
+    <div><label>API Key</label><input id="api-key" type="password" placeholder="your-api-key"></div>
+    <button class="btn" id="init-btn">Initialize SDK</button>
+    <span id="init-status" style="font-size:12px;color:#94a3b8"></span>
+  </div>
+
+  <!-- Column 1: Verification Flow -->
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">1</span> Create Verification</h2>
+      <p>Start a verification with the checks you want to run.</p>
+      <div class="grid2">
+        <div><label style="font-size:11px;color:#94a3b8">Client Ref</label><input id="client-ref" value="demo-{{RANDOM}}"></div>
+        <div><label style="font-size:11px;color:#94a3b8">Checks</label>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-document"> document</label>
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-face_match"> face_match</label>
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-liveness"> liveness</label>
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-aml"> aml</label>
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-affordability"> affordability</label>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-block" id="create-vid-btn">Create Verification</button>
+      <div class="res" id="vid-result"><div class="dump" id="vid-dump"></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">2</span> Document Upload</h2>
+      <p>Upload a passport, ID card, or driver's license.</p>
+      <select id="doc-type" style="margin-bottom:8px">
+        <option value="passport">Passport</option>
+        <option value="national_id">National ID</option>
+        <option value="drivers_license">Driver's License</option>
+      </select>
+      <input type="file" accept="image/*" id="doc-file" style="margin-bottom:8px">
+      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <div class="row">
+        <button class="btn" id="doc-submit" disabled>Upload Document</button>
+        <button class="btn btn-outline" id="doc-capture-btn">📷 Capture from Camera</button>
+      </div>
+      <div class="res" id="doc-result"><div class="dump" id="doc-dump"></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">3</span> Selfie Upload</h2>
+      <p>Upload a selfie for face matching and liveness.</p>
+      <input type="file" accept="image/*" id="sfl-file" style="margin-bottom:8px">
+      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <div class="row">
+        <button class="btn" id="sfl-submit" disabled>Upload Selfie</button>
+        <button class="btn btn-outline" id="sfl-capture-btn">📷 Take Selfie</button>
+      </div>
+      <div class="res" id="sfl-result"><div class="dump" id="sfl-dump"></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">4</span> Run Checks</h2>
+      <p>Execute face match, document liveness, and other checks.</p>
+      <div class="row">
+        <button class="btn" id="fm-btn" disabled>👤 Face Match</button>
+        <button class="btn" id="dl-btn" disabled>📄 Doc Liveness</button>
+        <button class="btn" id="al-btn" disabled>🎭 Active Liveness</button>
+        <button class="btn" id="nfc-btn" disabled>📡 NFC Verify</button>
+      </div>
+      <div class="res" id="chk-result"><div class="dump" id="chk-dump"></div></div>
+    </div>
+  </div>
+
+  <!-- Column 2: Additional Features + Log -->
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">AML</span> On-Device AML Screening (WASM)</h2>
+      <p>Run sanctions and PEP screening directly in the browser — no upload needed.</p>
+      <input type="text" id="aml-name" value="Vladimir Putin" placeholder="Enter a name to screen">
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="aml-btn">Screen Name</button>
+      </div>
+      <div class="res" id="aml-result"><div class="dump" id="aml-dump"></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">€</span> Affordability Check</h2>
+      <p>Estimate disposable income for player protection.</p>
+      <div class="grid2">
+        <div><label style="font-size:11px;color:#94a3b8">Monthly Income (€)</label><input type="number" id="aff-income" value="5000"></div>
+        <div><label style="font-size:11px;color:#94a3b8">Monthly Expenses (€)</label><input type="number" id="aff-expenses" value="2000"></div>
+        <div><label style="font-size:11px;color:#94a3b8">Country</label>
+          <select id="aff-country"><option value="NL">Netherlands</option><option value="DE">Germany</option><option value="UK">UK</option><option value="US">US</option><option value="CH">Switzerland</option><option value="SE">Sweden</option></select>
+        </div>
+        <div><label style="font-size:11px;color:#94a3b8">Dependents</label><input type="number" id="aff-dependents" value="0" min="0"></div>
+      </div>
+      <button class="btn" id="aff-btn">Check Affordability</button>
+      <div class="res" id="aff-result"><div class="dump" id="aff-dump"></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">🔍</span> Verification Status</h2>
+      <p>Poll for verification results and view all check details.</p>
+      <div class="row">
+        <button class="btn" id="poll-btn" disabled>Poll Status</button>
+        <button class="btn btn-outline" id="list-btn">List Verifications</button>
+      </div>
+      <div class="res" id="status-result"><div class="dump" id="status-dump"></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h2><span class="icon" style="background:#1e1b4b">📋</span> Multi-Spectral Check</h2>
+      <p>Upload UV/IR images for hardware security verification.</p>
+      <div class="grid2">
+        <div><label style="font-size:11px;color:#94a3b8">UV Image</label><input type="file" accept="image/*" id="uv-file"></div>
+        <div><label style="font-size:11px;color:#94a3b8">IR Image</label><input type="file" accept="image/*" id="ir-file"></div>
+      </div>
+      <button class="btn" id="ms-btn" disabled>Run Multi-Spectral Check</button>
+      <div class="res" id="ms-result"><div class="dump" id="ms-dump"></div></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon" style="background:#1e1b4b">📡</span> API Log</h2>
+      <div class="log" id="api-log"><span class="dim">Ready. Initialize SDK to begin.</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="/sdk/valydar.js"></script>
+<script src="/sdk/document-capture.js"></script>
+<script src="/sdk/selfie-capture.js"></script>
+<script>
+(function(){
+  'use strict';
+  var sdk = null, S = { vid: null, docId: null };
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+
+  function log(msg, data, type) {
+    var el = document.getElementById('api-log');
+    var d = document.createElement('div');
+    d.innerHTML = '<span class="dim">' + new Date().toLocaleTimeString() + '</span> ' +
+      '<span class="' + (type||'hl') + '">' + msg + '</span>';
+    if (data) { var p = document.createElement('pre'); p.style.cssText = 'margin:4px 0 8px;font-size:10px;color:#a5f3fc;white-space:pre-wrap'; p.textContent = JSON.stringify(data, null, 2); d.appendChild(p); }
+    el.appendChild(d); el.scrollTop = el.scrollHeight;
+  }
+
+  function show(prefix, data) {
+    var el = document.getElementById(prefix + '-result');
+    var dump = document.getElementById(prefix + '-dump');
+    el.classList.add('show');
+    dump.textContent = JSON.stringify(data, null, 2);
+    return data;
+  }
+
+  function getChecks() {
+    var c = [];
+    ['document','face_match','liveness','aml','affordability'].forEach(function(k) {
+      var el = document.getElementById('chk-' + k);
+      if (el && el.checked) c.push(k);
+    });
+    return c;
+  }
+
+  function initSdk() {
+    if (sdk) return Promise.resolve(sdk);
+    var key = document.getElementById('api-key').value.trim();
+    if (!key) { log('Enter an API key first', null, 'err'); return Promise.reject('no key'); }
+    sdk = new Valydar({ apiKey: key, apiUrl: document.getElementById('api-url').value.trim() });
+    document.getElementById('init-status').textContent = '✓ SDK ready';
+    log('SDK initialized');
+    return Promise.resolve(sdk);
+  }
+
+  // ── Create Verification ──────────────────────────────────────────────────
+
+  document.getElementById('create-vid-btn').addEventListener('click', function() {
+    var btn = this;
+    initSdk().then(function() {
+      var ref = document.getElementById('client-ref').value.replace('{{RANDOM}}', Date.now().toString(36));
+      var checks = getChecks();
+      log('POST /verifications checks=' + JSON.stringify(checks));
+      btn.disabled = true;
+      return sdk.createVerification({ clientReference: ref, checks: checks });
+    }).then(function(r) {
+      S.vid = r.id;
+      log('→ ' + r.id, r);
+      show('vid', r);
+      btn.disabled = false;
+      document.getElementById('fm-btn').disabled = false;
+      document.getElementById('dl-btn').disabled = false;
+      document.getElementById('al-btn').disabled = false;
+      document.getElementById('nfc-btn').disabled = false;
+      document.getElementById('poll-btn').disabled = false;
+      document.getElementById('doc-submit').disabled = false;
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); btn.disabled = false; });
+  });
+
+  // ── Document Upload ──────────────────────────────────────────────────────
+
+  var docFile = document.getElementById('doc-file');
+  docFile.addEventListener('change', function(e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader(); r.onload = function(ev) {
+      document.getElementById('doc-preview-img').src = ev.target.result;
+      document.getElementById('doc-preview').style.display = 'block';
+    }; r.readAsDataURL(f);
+  });
+
+  document.getElementById('doc-submit').addEventListener('click', function() {
+    var btn = this, file = docFile.files[0];
+    if (!file) { log('Select a document file first', null, 'err'); return; }
+    initSdk().then(function() {
+      if (!S.vid) return Promise.reject('Create a verification first');
+      log('POST /verifications/' + S.vid + '/documents');
+      btn.disabled = true;
+      return sdk.uploadDocument(S.vid, file, document.getElementById('doc-type').value);
+    }).then(function(r) {
+      S.docId = r.document_id;
+      log('→ doc ' + r.document_id, r);
+      show('doc', r);
+      document.getElementById('ms-btn').disabled = false;
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); btn.disabled = false; });
+  });
+
+  document.getElementById('doc-capture-btn').addEventListener('click', function() {
+    var capture = new ValydarCapture(document.createElement('div'), { type: 'document' });
+    var el = document.createElement('div');
+    el.style.cssText = 'position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center';
+    el.appendChild(document.createElement('div'));
+    document.body.appendChild(el);
+    var container = el.querySelector('div');
+    container.style.width = '100%'; container.style.maxWidth = '600px';
+    var c = new ValydarCapture(container, { type: 'document' });
+    c.start().then(function(blob) {
+      document.body.removeChild(el);
+      var file = new File([blob], 'capture.jpg', { type: 'image/jpeg' });
+      var dt = new DataTransfer(); dt.items.add(file);
+      docFile.files = dt.files;
+      var r = new FileReader(); r.onload = function(ev) {
+        document.getElementById('doc-preview-img').src = ev.target.result;
+        document.getElementById('doc-preview').style.display = 'block';
+        document.getElementById('doc-submit').disabled = false;
+      }; r.readAsDataURL(file);
+      log('Document captured from camera (' + (blob.size/1024).toFixed(0) + 'KB)');
+    }).catch(function(e) {
+      document.body.removeChild(el);
+      log('Capture cancelled: ' + e.message, null, 'err');
+    });
+  });
+
+  // ── Selfie Upload ────────────────────────────────────────────────────────
+
+  var sflFile = document.getElementById('sfl-file');
+  sflFile.addEventListener('change', function(e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader(); r.onload = function(ev) {
+      document.getElementById('sfl-preview-img').src = ev.target.result;
+      document.getElementById('sfl-preview').style.display = 'block';
+    }; r.readAsDataURL(f);
+  });
+
+  document.getElementById('sfl-submit').addEventListener('click', function() {
+    var btn = this, file = sflFile.files[0];
+    if (!file) { log('Select a selfie file first', null, 'err'); return; }
+    initSdk().then(function() {
+      if (!S.vid) return Promise.reject('Create a verification first');
+      log('POST /verifications/' + S.vid + '/selfie');
+      btn.disabled = true;
+      return sdk.uploadSelfie(S.vid, file);
+    }).then(function(r) {
+      log('→ selfie uploaded', r);
+      show('sfl', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); btn.disabled = false; });
+  });
+
+  document.getElementById('sfl-capture-btn').addEventListener('click', function() {
+    var el = document.createElement('div');
+    el.style.cssText = 'position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center';
+    document.body.appendChild(el);
+    var container = document.createElement('div');
+    container.style.width = '100%'; container.style.maxWidth = '400px';
+    el.appendChild(container);
+    var c = new ValydarCapture(container, { type: 'selfie', width: 640, height: 480 });
+    c.start().then(function(blob) {
+      document.body.removeChild(el);
+      var file = new File([blob], 'selfie.jpg', { type: 'image/jpeg' });
+      var dt = new DataTransfer(); dt.items.add(file);
+      sflFile.files = dt.files;
+      var r = new FileReader(); r.onload = function(ev) {
+        document.getElementById('sfl-preview-img').src = ev.target.result;
+        document.getElementById('sfl-preview').style.display = 'block';
+        document.getElementById('sfl-submit').disabled = false;
+      }; r.readAsDataURL(file);
+      log('Selfie captured from camera (' + (blob.size/1024).toFixed(0) + 'KB)');
+    }).catch(function(e) {
+      document.body.removeChild(el);
+      log('Capture cancelled: ' + e.message, null, 'err');
+    });
+  });
+
+  // ── Run Checks ───────────────────────────────────────────────────────────
+
+  function requireVid() {
+    if (!S.vid) { log('Create a verification first', null, 'err'); return false; }
+    return true;
+  }
+
+  document.getElementById('fm-btn').addEventListener('click', function() {
+    if (!requireVid()) return;
+    initSdk().then(function() {
+      log('POST /verifications/' + S.vid + '/face-match (mock)');
+      return sdk._fetch('POST', '/verifications/' + S.vid + '/face-match',
+        JSON.stringify({ document_id: 'mock', selfie_id: 'mock' }), true);
+    }).then(function(r) {
+      log('→ face match result', r);
+      show('chk', r);
+    }).catch(function(e) { log('Face match skipped: ' + e.message, null, 'err'); });
+  });
+
+  document.getElementById('dl-btn').addEventListener('click', function() {
+    if (!requireVid() || !S.docId) { log('Upload a document first', null, 'err'); return; }
+    initSdk().then(function() {
+      log('POST /verifications/' + S.vid + '/documents/' + S.docId + '/liveness');
+      return sdk.documentLiveness(S.vid, S.docId);
+    }).then(function(r) {
+      log('→ doc liveness', r);
+      show('chk', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
+  });
+
+  document.getElementById('al-btn').addEventListener('click', function() {
+    if (!requireVid()) return;
+    initSdk().then(function() {
+      log('POST /verifications/' + S.vid + '/active-liveness/challenge');
+      return sdk._fetch('POST', '/verifications/' + S.vid + '/active-liveness/challenge');
+    }).then(function(r) {
+      log('→ active liveness challenge', r);
+      show('chk', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
+  });
+
+  document.getElementById('nfc-btn').addEventListener('click', function() {
+    if (!requireVid()) return;
+    initSdk().then(function() {
+      log('POST /verifications/' + S.vid + '/nfc (mock)');
+      return sdk._fetch('POST', '/verifications/' + S.vid + '/nfc',
+        JSON.stringify({ mrz_data: {}, security_object: {}, chip_info: {} }), true);
+    }).then(function(r) {
+      log('→ NFC result', r);
+      show('chk', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
+  });
+
+  // ── Poll Status ──────────────────────────────────────────────────────────
+
+  document.getElementById('poll-btn').addEventListener('click', function() {
+    if (!requireVid()) return;
+    initSdk().then(function() {
+      log('GET /verifications/' + S.vid);
+      return sdk.getVerification(S.vid);
+    }).then(function(r) {
+      log('→ status', r);
+      show('status', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
+  });
+
+  document.getElementById('list-btn').addEventListener('click', function() {
+    initSdk().then(function() {
+      log('GET /verifications');
+      return sdk._fetch('GET', '/verifications?limit=5');
+    }).then(function(r) {
+      log('→ verifications', r);
+      show('status', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
+  });
+
+  // ── AML (WASM) ───────────────────────────────────────────────────────────
+
+  document.getElementById('aml-btn').addEventListener('click', function() {
+    var name = document.getElementById('aml-name').value.trim() || 'Unknown';
+    log('Running WASM AML screening for: ' + name);
+    try {
+      if (typeof ValydarWasm !== 'undefined' && ValydarWasm.screen_name) {
+        var result = JSON.parse(ValydarWasm.screen_name(name, null));
+        log('→ AML result', result);
+        show('aml', result);
+      } else {
+        log('WASM module not loaded, using mock', null, 'err');
+        show('aml', { risk_score: 0.85, pep_flagged: true, risk_level: 'High', warnings: ['WASM module not available — install @valydar/wasm'] });
+      }
+    } catch(e) {
+      log('AML error: ' + e.message, null, 'err');
+    }
+  });
+
+  // ── Affordability ────────────────────────────────────────────────────────
+
+  document.getElementById('aff-btn').addEventListener('click', function() {
+    var income = parseFloat(document.getElementById('aff-income').value) || 0;
+    var expenses = parseFloat(document.getElementById('aff-expenses').value) || 0;
+    var country = document.getElementById('aff-country').value;
+    var dependents = parseInt(document.getElementById('aff-dependents').value) || 0;
+    var disposable = income - expenses;
+    var tier = disposable < 1000 ? 'Low' : disposable < 3000 ? 'Medium' : 'High';
+    var result = {
+      tier: tier,
+      estimated_disposable_income: disposable,
+      declared_income: income,
+      monthly_expenses: expenses,
+      country: country,
+      dependents: dependents,
+      income_confidence: 'Declared'
+    };
+    log('Affordability check: income=' + income + ' expenses=' + expenses + ' → ' + tier, result);
+    show('aff', result);
+  });
+
+  // ── Multi-Spectral ───────────────────────────────────────────────────────
+
+  document.getElementById('ms-btn').addEventListener('click', function() {
+    if (!requireVid() || !S.docId) { log('Upload a document first', null, 'err'); return; }
+    var uv = document.getElementById('uv-file').files[0];
+    var ir = document.getElementById('ir-file').files[0];
+    if (!uv && !ir) { log('Upload at least a UV or IR image', null, 'err'); return; }
+    initSdk().then(function() {
+      var form = new FormData();
+      if (uv) form.append('uv', uv);
+      if (ir) form.append('ir', ir);
+      log('POST /verifications/' + S.vid + '/documents/' + S.docId + '/multispectral');
+      return sdk._fetch('POST', '/verifications/' + S.vid + '/documents/' + S.docId + '/multispectral', form);
+    }).then(function(r) {
+      log('→ multi-spectral result', r);
+      show('ms', r);
+    }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
+  });
+
+  // ── WASM Auto-init ──────────────────────────────────────────────────────
+
+  if (typeof ValydarWasm !== 'undefined' && ValydarWasm.default) {
+    ValydarWasm.default().then(function() {
+      log('WASM module loaded (' + ValydarWasm.version() + ')', null, 'ok');
+    }).catch(function(e) {
+      log('WASM init failed: ' + e.message, null, 'err');
+    });
+  }
+
+  log('Demo ready. Configure your API key and start verifying.');
+})();
+</script>
+</body>
+</html>
