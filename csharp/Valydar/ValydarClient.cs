@@ -81,5 +81,91 @@ public class ValydarClient : IDisposable
             new { document_id = documentId, selfie_id = selfieId });
     }
 
+    public async Task<SelfieLivenessResponse> SelfieLivenessAsync(string verificationId)
+        => await PostAsync<SelfieLivenessResponse>(
+            $"/verifications/{verificationId}/selfie-liveness");
+
+    public async Task<DeepfakeResult> DeepfakeAsync(string verificationId)
+        => await PostAsync<DeepfakeResult>(
+            $"/verifications/{verificationId}/deepfake");
+
+    public async Task<NfcResult> VerifyNfcAsync(
+        string verificationId,
+        Dictionary<string, object>? expectedDg1 = null)
+    {
+        var body = expectedDg1 is not null
+            ? new { expected_dg1 = expectedDg1 }
+            : null;
+        return await PostAsync<NfcResult>(
+            $"/verifications/{verificationId}/nfc", body);
+    }
+
+    public async Task<ActiveLivenessChallenge> ActiveLivenessChallengeAsync(
+        string verificationId,
+        string challengeType = "blink")
+    {
+        return await PostAsync<ActiveLivenessChallenge>(
+            $"/verifications/{verificationId}/active-liveness/challenge",
+            new { challenge_type = challengeType });
+    }
+
+    public async Task<ActiveLivenessResult> ActiveLivenessVerifyAsync(
+        string verificationId,
+        string challengeId,
+        List<string> frames)
+    {
+        return await PostAsync<ActiveLivenessResult>(
+            $"/verifications/{verificationId}/active-liveness/verify",
+            new { challenge_id = challengeId, frames });
+    }
+
+    public async Task<ListVerificationsResponse> ListVerificationsAsync()
+        => await GetAsync<ListVerificationsResponse>("/verifications");
+
+    public async Task<LivenessResult> DocumentLivenessAsync(
+        string verificationId,
+        string documentId)
+    {
+        return await PostAsync<LivenessResult>(
+            $"/verifications/{verificationId}/documents/{documentId}/liveness");
+    }
+
+    public async Task<Dictionary<string, object>> UploadSelfieAsync(
+        string verificationId,
+        string imagePath)
+    {
+        using var form = new MultipartFormDataContent();
+        var imageBytes = await File.ReadAllBytesAsync(imagePath);
+        form.Add(new ByteArrayContent(imageBytes), "file", Path.GetFileName(imagePath));
+
+        var resp = await _http.PostAsync(
+            $"{_baseUrl}/verifications/{verificationId}/selfie", form);
+        resp.EnsureSuccessStatusCode();
+        var json = await resp.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<Dictionary<string, object>>(json)!;
+    }
+
+    public async Task<Dictionary<string, object>> DemoVerifyAsync(
+        string documentPath,
+        string? selfiePath = null,
+        List<string>? checks = null)
+    {
+        using var form = new MultipartFormDataContent();
+        var docBytes = await File.ReadAllBytesAsync(documentPath);
+        form.Add(new ByteArrayContent(docBytes), "document", Path.GetFileName(documentPath));
+        if (selfiePath is not null)
+        {
+            var selfieBytes = await File.ReadAllBytesAsync(selfiePath);
+            form.Add(new ByteArrayContent(selfieBytes), "selfie", Path.GetFileName(selfiePath));
+        }
+        if (checks is not null)
+            form.Add(new StringContent(JsonSerializer.Serialize(checks)), "checks");
+
+        var resp = await _http.PostAsync($"{_baseUrl}/demo/verify", form);
+        resp.EnsureSuccessStatusCode();
+        var json = await resp.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<Dictionary<string, object>>(json)!;
+    }
+
     public void Dispose() => _http.Dispose();
 }

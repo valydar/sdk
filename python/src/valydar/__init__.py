@@ -1,12 +1,18 @@
 from .client import ValydarClient, ValydarError
 from .types import (
+    ActiveLivenessChallenge,
+    ActiveLivenessResult,
+    DeepfakeResult,
     DocumentUploadResponse,
     ErrorResponse,
     FaceMatchResponse,
     FaceRegion,
     HealthResponse,
+    ListVerificationsResponse,
     LivenessCheck,
     LivenessResult,
+    NfcResult,
+    SelfieLivenessResponse,
     VerificationResponse,
 )
 
@@ -21,4 +27,10 @@ __all__ = [
     "LivenessResult",
     "LivenessCheck",
     "ErrorResponse",
+    "SelfieLivenessResponse",
+    "DeepfakeResult",
+    "NfcResult",
+    "ActiveLivenessChallenge",
+    "ActiveLivenessResult",
+    "ListVerificationsResponse",
 ]

@@ -63,3 +63,44 @@ public record LivenessResult(
     @JsonProperty("score") double score,
     @JsonProperty("checks") List<LivenessCheck> checks
 ) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record SelfieLivenessResponse(
+    @JsonProperty("passed") boolean passed,
+    @JsonProperty("score") double score,
+    @JsonProperty("checks") List<LivenessCheck> checks
+) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record DeepfakeResult(
+    @JsonProperty("passed") boolean passed,
+    @JsonProperty("score") double score,
+    @JsonProperty("details") Map<String, Object> details
+) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record NfcResult(
+    @JsonProperty("passed") boolean passed,
+    @JsonProperty("chip_data") Map<String, Object> chipData,
+    @JsonProperty("details") Map<String, Object> details
+) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record ActiveLivenessChallenge(
+    @JsonProperty("challenge_id") String challengeId,
+    @JsonProperty("challenge_type") String challengeType,
+    @JsonProperty("expires_at") String expiresAt
+) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record ActiveLivenessResult(
+    @JsonProperty("passed") boolean passed,
+    @JsonProperty("score") double score,
+    @JsonProperty("challenge_id") String challengeId
+) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record ListVerificationsResponse(
+    @JsonProperty("verifications") List<VerificationResponse> verifications,
+    @JsonProperty("total") int total
+) {}
