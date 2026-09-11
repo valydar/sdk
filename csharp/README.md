@@ -56,7 +56,16 @@ Console.WriteLine($"Face match: {result.Passed}, confidence: {result.Confidence}
 | Method | Description |
 |--------|-------------|
 | `HealthAsync()` | Check API health |
+| `ListVerificationsAsync()` | List all verifications |
 | `CreateVerificationAsync(clientRef, checks)` | Create a new verification |
 | `GetVerificationAsync(id)` | Get verification status |
 | `UploadDocumentAsync(verId, imagePath, docType)` | Upload a document image |
+| `UploadSelfieAsync(verId, imagePath)` | Upload a selfie |
 | `FaceMatchAsync(verId, docId, selfieId)` | Run face comparison |
+| `DocumentLivenessAsync(verId, docId)` | Check document liveness |
+| `SelfieLivenessAsync(verId)` | Run passive selfie liveness |
+| `DeepfakeAsync(verId)` | Detect deepfake / AI-generated selfie |
+| `VerifyNfcAsync(verId, expectedDg1)` | Verify ePassport NFC chip |
+| `ActiveLivenessChallengeAsync(verId, type)` | Generate active liveness challenge |
+| `ActiveLivenessVerifyAsync(verId, challengeId, frames)` | Verify active liveness |
+| `DemoVerifyAsync(documentPath, selfiePath, checks)` | Run the public no-auth demo |

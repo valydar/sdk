@@ -5,10 +5,16 @@ from urllib.parse import urljoin
 import httpx
 
 from .types import (
+    ActiveLivenessChallenge,
+    ActiveLivenessResult,
+    DeepfakeResult,
     DocumentUploadResponse,
     FaceMatchResponse,
     HealthResponse,
+    ListVerificationsResponse,
     LivenessResult,
+    NfcResult,
+    SelfieLivenessResponse,
     VerificationResponse,
 )
 
@@ -149,6 +155,80 @@ class ValydarClient:
             f"/verifications/{verification_id}/documents/{document_id}/liveness",
         )
         return LivenessResult.model_validate(resp.json())
+
+    def selfie_liveness(self, verification_id: str) -> SelfieLivenessResponse:
+        resp = self._post(f"/verifications/{verification_id}/selfie-liveness")
+        return SelfieLivenessResponse.model_validate(resp.json())
+
+    def deepfake(self, verification_id: str) -> DeepfakeResult:
+        resp = self._post(f"/verifications/{verification_id}/deepfake")
+        return DeepfakeResult.model_validate(resp.json())
+
+    def verify_nfc(
+        self,
+        verification_id: str,
+        expected_dg1: Optional[dict[str, Any]] = None,
+    ) -> NfcResult:
+        payload: dict[str, Any] = {}
+        if expected_dg1 is not None:
+            payload["expected_dg1"] = expected_dg1
+        resp = self._post(f"/verifications/{verification_id}/nfc", json=payload)
+        return NfcResult.model_validate(resp.json())
+
+    # ── Active Liveness ────────────────────────────────────────────────────────
+
+    def active_liveness_challenge(
+        self,
+        verification_id: str,
+        challenge_type: str = "blink",
+    ) -> ActiveLivenessChallenge:
+        resp = self._post(
+            f"/verifications/{verification_id}/active-liveness/challenge",
+            json={"challenge_type": challenge_type},
+        )
+        return ActiveLivenessChallenge.model_validate(resp.json())
+
+    def active_liveness_verify(
+        self,
+        verification_id: str,
+        challenge_id: str,
+        frames: list[str],
+    ) -> ActiveLivenessResult:
+        resp = self._post(
+            f"/verifications/{verification_id}/active-liveness/verify",
+            json={"challenge_id": challenge_id, "frames": frames},
+        )
+        return ActiveLivenessResult.model_validate(resp.json())
+
+    # ── Verifications ──────────────────────────────────────────────────────────
+
+    def list_verifications(self) -> ListVerificationsResponse:
+        resp = self._get("/verifications")
+        return ListVerificationsResponse.model_validate(resp.json())
+
+    # ── Demo ───────────────────────────────────────────────────────────────────
+
+    def demo_verify(
+        self,
+        document_path: str | Path,
+        selfie_path: str | Path | None = None,
+        checks: Optional[list[str]] = None,
+    ) -> dict[str, Any]:
+        doc = Path(document_path)
+        files: dict[str, Any] = {
+            "document": (doc.name, doc.read_bytes(), "image/jpeg"),
+        }
+        if selfie_path is not None:
+            selfie = Path(selfie_path)
+            files["selfie"] = (selfie.name, selfie.read_bytes(), "image/jpeg")
+        if checks:
+            files["checks"] = (None, ",".join(checks))
+        resp = self._client.post(
+            urljoin(str(self._client.base_url), "/demo/verify"),
+            files=files,
+        )
+        self._raise_for_error(resp)
+        return resp.json()
 
     def close(self) -> None:
         self._client.close()

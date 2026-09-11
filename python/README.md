@@ -59,9 +59,16 @@ print(f"Face match: {result.passed}, confidence: {result.confidence}")
 | Method | Description |
 |--------|-------------|
 | `health()` | Check API health |
+| `list_verifications()` | List all verifications |
 | `create_verification(client_ref, checks)` | Create a new verification |
 | `get_verification(id)` | Get verification status |
 | `upload_document(ver_id, image_path, doc_type)` | Upload a document image |
 | `upload_selfie(ver_id, image_path)` | Upload a selfie |
 | `face_match(ver_id, doc_id, selfie_id)` | Run face comparison |
 | `document_liveness(ver_id, doc_id)` | Check document liveness |
+| `selfie_liveness(ver_id)` | Run passive selfie liveness |
+| `deepfake(ver_id)` | Detect deepfake / AI-generated selfie |
+| `verify_nfc(ver_id, expected_dg1)` | Verify ePassport NFC chip |
+| `active_liveness_challenge(ver_id, type)` | Generate active liveness challenge |
+| `active_liveness_verify(ver_id, challenge_id, frames)` | Verify active liveness |
+| `demo_verify(document_path, selfie_path, checks)` | Run the public no-auth demo |

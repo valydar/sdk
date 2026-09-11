@@ -61,6 +61,41 @@ class DocLivenessResponse(BaseModel):
     checks: list[LivenessCheck]
 
 
+class SelfieLivenessResponse(BaseModel):
+    passed: bool
+    score: float
+    checks: list[LivenessCheck]
+
+
+class DeepfakeResult(BaseModel):
+    passed: bool
+    score: float
+    details: Optional[dict[str, Any]] = None
+
+
+class NfcResult(BaseModel):
+    passed: bool
+    chip_data: Optional[dict[str, Any]] = None
+    details: Optional[dict[str, Any]] = None
+
+
+class ActiveLivenessChallenge(BaseModel):
+    challenge_id: str
+    challenge_type: str
+    expires_at: str
+
+
+class ActiveLivenessResult(BaseModel):
+    passed: bool
+    score: float
+    challenge_id: str
+
+
+class ListVerificationsResponse(BaseModel):
+    verifications: list[VerificationResponse]
+    total: int
+
+
 class ApiError(BaseModel):
     code: str
     message: str
