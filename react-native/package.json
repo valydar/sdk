@@ -16,11 +16,11 @@
     "react-native-document-scanner": "^1.0.0"
   },
   "dependencies": {
-    "react-native-mmkv": "^3.0.0"
+    "react-native-mmkv": "^4.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0",
-    "typescript": "^5.0.0"
+    "@types/react": "^19.0.0",
+    "typescript": "^7.0.0"
   },
   "keywords": ["valydar", "identity", "verification", "kyc", "document", "liveness"],
   "license": "MIT"
