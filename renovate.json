@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "groupName": "JavaScript/TypeScript dependencies",
+      "groupSlug": "js-deps"
+    },
+    {
+      "matchManagers": ["maven"],
+      "groupName": "Maven dependencies",
+      "groupSlug": "maven-deps"
+    },
+    {
+      "matchManagers": ["gradle"],
+      "groupName": "Gradle dependencies",
+      "groupSlug": "gradle-deps"
+    },
+    {
+      "matchManagers": ["nuget"],
+      "groupName": ".NET dependencies",
+      "groupSlug": "nuget-deps"
+    },
+    {
+      "matchManagers": ["pip_requirements", "pep621"],
+      "groupName": "Python dependencies",
+      "groupSlug": "python-deps"
+    },
+    {
+      "matchManagers": ["pub"],
+      "groupName": "Flutter dependencies",
+      "groupSlug": "flutter-deps"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "schedule": ["before 6am on Monday"]
+}
