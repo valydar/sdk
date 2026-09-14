@@ -3,6 +3,10 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val okhttpVersion = "4.12.0"
+val kotlinxSerializationVersion = "1.6.0"
+val androidxCameraVersion = "1.3.0"
+
 android {
     namespace = "com.valydar"
     compileSdk = 34
@@ -22,8 +26,8 @@ android {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("androidx.camera:camera-core:1.3.0")
-    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    implementation("androidx.camera:camera-core:$androidxCameraVersion")
+    implementation("androidx.camera:camera-camera2:$androidxCameraVersion")
 }
