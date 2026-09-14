@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import type { DocumentCaptureProps, DocumentUploadResponse } from './types';
+import type { DocumentCaptureProps } from './types';
 import { ValydarClient } from './ValydarClient';
 
 type CapturePhase = 'framing' | 'capturing' | 'uploading' | 'complete' | 'error';
