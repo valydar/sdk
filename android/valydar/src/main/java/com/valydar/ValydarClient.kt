@@ -10,6 +10,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+private const val EMPTY_RESPONSE = "Empty response"
+
 class ValydarClient(
     private val apiKey: String,
     private val baseUrl: String = "https://api.dev.valydar.com"
@@ -29,7 +31,7 @@ class ValydarClient(
 
     private inline fun <reified T> get(path: String): T {
         val resp = client.newCall(request(path).get().build()).execute()
-        val body = resp.body?.string() ?: throw RuntimeException("Empty response")
+        val body = resp.body?.string() ?: throw RuntimeException(EMPTY_RESPONSE)
         return json.decodeFromString(body)
     }
 
@@ -40,7 +42,7 @@ class ValydarClient(
             .post(jsonBody?.toRequestBody(mediaType) ?: "".toRequestBody())
             .build()
         val resp = client.newCall(req).execute()
-        val result = resp.body?.string() ?: throw RuntimeException("Empty response")
+        val result = resp.body?.string() ?: throw RuntimeException(EMPTY_RESPONSE)
         return json.decodeFromString(result)
     }
 
@@ -75,7 +77,7 @@ class ValydarClient(
             .build()
 
         val resp = client.newCall(req).execute()
-        val result = resp.body?.string() ?: throw RuntimeException("Empty response")
+        val result = resp.body?.string() ?: throw RuntimeException(EMPTY_RESPONSE)
         return json.decodeFromString(result)
     }
 
