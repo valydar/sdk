@@ -14,6 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ValydarClient implements AutoCloseable {
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String IMAGE_JPEG = "image/jpeg";
+    private static final String VERIFICATIONS_ROOT = "/verifications";
+    private static final String VERIFICATIONS_PATH = "/verifications/";
+    private static final String BOUNDARY_PREFIX = "----boundary";
+    private static final String MULTIPART_BOUNDARY = "multipart/form-data; boundary=";
+
     private final HttpClient http;
     private final String baseUrl;
     private final String apiKey;
@@ -39,7 +47,7 @@ public class ValydarClient implements AutoCloseable {
     private <T> T send(HttpRequest request, Class<T> type) throws Exception {
         var resp = http.send(request, HttpResponse.BodyHandlers.ofString());
         if (resp.statusCode() >= 400) {
-            throw new RuntimeException("HTTP " + resp.statusCode() + ": " + resp.body());
+            throw new ValydarException("HTTP " + resp.statusCode() + ": " + resp.body());
         }
         return mapper.readValue(resp.body(), type);
     }
@@ -47,7 +55,7 @@ public class ValydarClient implements AutoCloseable {
     private String sendRaw(HttpRequest request) throws Exception {
         var resp = http.send(request, HttpResponse.BodyHandlers.ofString());
         if (resp.statusCode() >= 400) {
-            throw new RuntimeException("HTTP " + resp.statusCode() + ": " + resp.body());
+            throw new ValydarException("HTTP " + resp.statusCode() + ": " + resp.body());
         }
         return resp.body();
     }
@@ -58,6 +66,12 @@ public class ValydarClient implements AutoCloseable {
 
     private record MultipartPart(
         String name, String filename, String contentType, byte[] content) {}
+
+    public static class ValydarException extends RuntimeException {
+        public ValydarException(String message) {
+            super(message);
+        }
+    }
 
     private byte[] buildMultipart(String boundary, List<MultipartPart> parts) throws Exception {
         var body = new java.io.ByteArrayOutputStream();
@@ -71,7 +85,7 @@ public class ValydarClient implements AutoCloseable {
             }
             writer.write("\r\n");
             if (part.contentType != null) {
-                writer.write("Content-Type: " + part.contentType + "\r\n\r\n");
+                writer.write(CONTENT_TYPE + ": " + part.contentType + "\r\n\r\n");
             } else {
                 writer.write("\r\n");
             }
@@ -96,28 +110,28 @@ public class ValydarClient implements AutoCloseable {
             public final String client_reference = clientReference;
             public final List<String> checks = checks;
         });
-        var req = request("/verifications")
-            .header("Content-Type", "application/json")
+        var req = request(VERIFICATIONS_ROOT)
+            .header(CONTENT_TYPE, APPLICATION_JSON)
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
         return send(req, VerificationResponse.class);
     }
 
     public VerificationResponse getVerification(String id) throws Exception {
-        var req = request("/verifications/" + id).GET().build();
+        var req = request(VERIFICATIONS_PATH + id).GET().build();
         return send(req, VerificationResponse.class);
     }
 
     public DocumentUploadResponse uploadDocument(
         String verificationId, Path imagePath, String documentType) throws Exception {
-        var boundary = "----boundary" + System.currentTimeMillis();
+        var boundary = BOUNDARY_PREFIX + System.currentTimeMillis();
         var body = new java.io.ByteArrayOutputStream();
         var writer = new java.io.BufferedWriter(new java.io.OutputStreamWriter(body));
 
         writer.write("--" + boundary + "\r\n");
         writer.write("Content-Disposition: form-data; name=\"file\"; filename=\""
             + imagePath.getFileName() + "\"\r\n");
-        writer.write("Content-Type: image/jpeg\r\n\r\n");
+        writer.write(CONTENT_TYPE + ": " + IMAGE_JPEG + "\r\n\r\n");
         writer.flush();
         body.write(Files.readAllBytes(imagePath));
         writer.write("\r\n");
@@ -130,22 +144,22 @@ public class ValydarClient implements AutoCloseable {
         writer.write("--" + boundary + "--\r\n");
         writer.flush();
 
-        var req = request("/verifications/" + verificationId + "/documents")
-            .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+        var req = request(VERIFICATIONS_PATH + verificationId + "/documents")
+            .header(CONTENT_TYPE, MULTIPART_BOUNDARY + boundary)
             .POST(HttpRequest.BodyPublishers.ofByteArray(body.toByteArray()))
             .build();
         return send(req, DocumentUploadResponse.class);
     }
 
     public SelfieLivenessResponse selfieLiveness(String id) throws Exception {
-        var req = request("/verifications/" + id + "/selfie-liveness")
+        var req = request(VERIFICATIONS_PATH + id + "/selfie-liveness")
             .POST(HttpRequest.BodyPublishers.noBody())
             .build();
         return send(req, SelfieLivenessResponse.class);
     }
 
     public DeepfakeResult deepfake(String id) throws Exception {
-        var req = request("/verifications/" + id + "/deepfake")
+        var req = request(VERIFICATIONS_PATH + id + "/deepfake")
             .POST(HttpRequest.BodyPublishers.noBody())
             .build();
         return send(req, DeepfakeResult.class);
@@ -155,8 +169,8 @@ public class ValydarClient implements AutoCloseable {
         var body = mapper.writeValueAsString(new Object() {
             public final Map<String, Object> expected_dg1 = expectedDg1;
         });
-        var req = request("/verifications/" + id + "/nfc")
-            .header("Content-Type", "application/json")
+        var req = request(VERIFICATIONS_PATH + id + "/nfc")
+            .header(CONTENT_TYPE, APPLICATION_JSON)
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
         return send(req, NfcResult.class);
@@ -167,8 +181,8 @@ public class ValydarClient implements AutoCloseable {
         var body = mapper.writeValueAsString(new Object() {
             public final String challenge_type = challengeType;
         });
-        var req = request("/verifications/" + id + "/active-liveness/challenge")
-            .header("Content-Type", "application/json")
+        var req = request(VERIFICATIONS_PATH + id + "/active-liveness/challenge")
+            .header(CONTENT_TYPE, APPLICATION_JSON)
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
         return send(req, ActiveLivenessChallenge.class);
@@ -180,15 +194,15 @@ public class ValydarClient implements AutoCloseable {
             public final String challenge_id = challengeId;
             public final List<String> frames = frames;
         });
-        var req = request("/verifications/" + id + "/active-liveness/verify")
-            .header("Content-Type", "application/json")
+        var req = request(VERIFICATIONS_PATH + id + "/active-liveness/verify")
+            .header(CONTENT_TYPE, APPLICATION_JSON)
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
         return send(req, ActiveLivenessResult.class);
     }
 
     public ListVerificationsResponse listVerifications() throws Exception {
-        var req = request("/verifications").GET().build();
+        var req = request(VERIFICATIONS_ROOT).GET().build();
         return send(req, ListVerificationsResponse.class);
     }
 
@@ -198,28 +212,28 @@ public class ValydarClient implements AutoCloseable {
             public final String document_id = documentId;
             public final String selfie_id = selfieId;
         });
-        var req = request("/verifications/" + id + "/face-match")
-            .header("Content-Type", "application/json")
+        var req = request(VERIFICATIONS_PATH + id + "/face-match")
+            .header(CONTENT_TYPE, APPLICATION_JSON)
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build();
         return send(req, FaceMatchResponse.class);
     }
 
     public LivenessResult documentLiveness(String id, String documentId) throws Exception {
-        var req = request("/verifications/" + id + "/documents/" + documentId + "/liveness")
+        var req = request(VERIFICATIONS_PATH + id + "/documents/" + documentId + "/liveness")
             .POST(HttpRequest.BodyPublishers.noBody())
             .build();
         return send(req, LivenessResult.class);
     }
 
     public String uploadSelfie(String id, Path imagePath) throws Exception {
-        var boundary = "----boundary" + System.currentTimeMillis();
+        var boundary = BOUNDARY_PREFIX + System.currentTimeMillis();
         var multipart = buildMultipart(boundary, List.of(
-            new MultipartPart("file", imagePath.getFileName().toString(), "image/jpeg",
+            new MultipartPart("file", imagePath.getFileName().toString(), IMAGE_JPEG,
                 Files.readAllBytes(imagePath))
         ));
-        var req = request("/verifications/" + id + "/selfie")
-            .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+        var req = request(VERIFICATIONS_PATH + id + "/selfie")
+            .header(CONTENT_TYPE, MULTIPART_BOUNDARY + boundary)
             .POST(HttpRequest.BodyPublishers.ofByteArray(multipart))
             .build();
         return sendRaw(req);
@@ -227,13 +241,13 @@ public class ValydarClient implements AutoCloseable {
 
     public Map<String, Object> demoVerify(
         Path documentPath, Path selfiePath, List<String> checks) throws Exception {
-        var boundary = "----boundary" + System.currentTimeMillis();
+        var boundary = BOUNDARY_PREFIX + System.currentTimeMillis();
         var parts = new ArrayList<MultipartPart>();
         parts.add(new MultipartPart("document", documentPath.getFileName().toString(),
-            "image/jpeg", Files.readAllBytes(documentPath)));
+            IMAGE_JPEG, Files.readAllBytes(documentPath)));
         if (selfiePath != null) {
             parts.add(new MultipartPart("selfie", selfiePath.getFileName().toString(),
-                "image/jpeg", Files.readAllBytes(selfiePath)));
+                IMAGE_JPEG, Files.readAllBytes(selfiePath)));
         }
         if (checks != null && !checks.isEmpty()) {
             parts.add(new MultipartPart("checks", null, null,
@@ -241,7 +255,7 @@ public class ValydarClient implements AutoCloseable {
         }
         var multipart = buildMultipart(boundary, parts);
         var req = request("/demo/verify")
-            .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+            .header(CONTENT_TYPE, MULTIPART_BOUNDARY + boundary)
             .POST(HttpRequest.BodyPublishers.ofByteArray(multipart))
             .build();
         return sendMap(req);
