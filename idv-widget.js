@@ -25,7 +25,6 @@
   IdvWidget.prototype.start = function (options) {
     options = options || {};
     var checks = options.checks || ['identity', 'aml', 'self_exclusion'];
-    var self = this;
     this.renderLoading();
 
     fetch(API_BASE + '/verifications', {
@@ -40,17 +39,17 @@
       })
     })
     .then(function (r) { return r.json(); })
-    .then(function (data) {
-      self.verificationId = data.id;
+    .then((data) => {
+      this.verificationId = data.id;
       if (data.redirect_url) {
-        self.renderRedirect(data.redirect_url);
+        this.renderRedirect(data.redirect_url);
       } else {
-        self.startPolling();
+        this.startPolling();
       }
     })
-    .catch(function (err) {
-      self.renderError(err.message || 'Failed to create verification');
-      self.onError(err);
+    .catch((err) => {
+      this.renderError(err.message || 'Failed to create verification');
+      this.onError(err);
     });
   };
 
@@ -71,24 +70,23 @@
   };
 
   IdvWidget.prototype.startPolling = function () {
-    var self = this;
     this.renderLoading();
-    this.statusPollInterval = setInterval(function () {
-      fetch(API_BASE + '/verifications/' + self.verificationId, {
-        headers: { 'Authorization': 'Bearer ' + self.apiKey }
+    this.statusPollInterval = setInterval(() => {
+      fetch(API_BASE + '/verifications/' + this.verificationId, {
+        headers: { 'Authorization': 'Bearer ' + this.apiKey }
       })
       .then(function (r) { return r.json(); })
-      .then(function (data) {
+      .then((data) => {
         if (data.status === 'completed') {
-          clearInterval(self.statusPollInterval);
-          self.renderSuccess(data);
-          self.onComplete(data);
+          clearInterval(this.statusPollInterval);
+          this.renderSuccess(data);
+          this.onComplete(data);
         } else if (data.status === 'failed') {
-          clearInterval(self.statusPollInterval);
-          self.renderError('Verification failed');
-          self.onError(new Error('Verification failed'));
+          clearInterval(this.statusPollInterval);
+          this.renderError('Verification failed');
+          this.onError(new Error('Verification failed'));
         } else {
-          self.renderProgress(data.checks || {});
+          this.renderProgress(data.checks || {});
         }
       })
       .catch(function () {});
@@ -104,8 +102,8 @@
       '<table style="width:100%;max-width:360px;margin:16px auto;border-collapse:collapse;text-align:left;font-size:13px">';
     Object.keys(checks).forEach(function (key) {
       var check = checks[key];
-      var passed = check && check.passed;
-      html += '<tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-transform:capitalize">' + key.replace(/_/g, ' ') +
+      var passed = check?.passed;
+      html += '<tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-transform:capitalize">' + key.replaceAll('_', ' ') +
         '</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;text-align:right">' +
         (passed ? '<span style="color:#10b981">&#10003;</span>' : '<span style="color:#ef4444">&#10007;</span>') +
         '</td></tr>';
@@ -116,7 +114,7 @@
 
   IdvWidget.prototype.renderProgress = function () {
     var checks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var completed = Object.keys(checks).filter(function (k) { return checks[k] && checks[k].passed !== undefined; }).length;
+    var completed = Object.keys(checks).filter(function (k) { return checks[k]?.passed !== undefined; }).length;
     var html = '<div style="text-align:center;padding:40px;font-family:-apple-system,sans-serif">' +
       '<div style="border:3px solid #e2e8f0;border-top:3px solid #4f6ef7;border-radius:50%;width:32px;height:32px;animation:spin 0.8s linear infinite;margin:0 auto 16px"></div>' +
       '<p style="color:#64748b;font-size:14px">Processing... (' + completed + ' checks completed)</p>' +
