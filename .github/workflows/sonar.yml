@@ -35,3 +35,17 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_SCANNER_JAVA_OPTS: -Xmx1024m
+
+      - name: Enforce SonarQube quality gate
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          status=$(curl -sf -u "$SONAR_TOKEN:" \
+            "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=valydar_sdk" \
+            | grep -o '"status":"[A-Z]*"' | head -n1 | cut -d'"' -f4)
+          echo "Quality gate status: $status"
+          if [ "$status" != "OK" ]; then
+            echo "::error::SonarQube quality gate failed (status=$status)"
+            exit 1
+          fi
