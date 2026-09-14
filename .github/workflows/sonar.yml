@@ -44,18 +44,4 @@ jobs:
         run: |
           curl -sf -u "$SONAR_TOKEN:" \
             "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=valydar_sdk" \
-            | python3 -c '
-              import json, sys
-              ps = json.load(sys.stdin)["projectStatus"]
-              bad = []
-              for c in ps["conditions"]:
-                  name = c["metricKey"]
-                  status = c["status"]
-                  print("gate: " + name + "=" + status)
-                  if status == "ERROR" and name != "new_coverage":
-                      bad.append(name)
-              if bad:
-                  print("::error::quality gate failed on: " + ", ".join(bad))
-                  raise SystemExit(1)
-              print("quality gate OK (new_coverage exempt per sdk#36)")
-            '
+            | python3 -c 'import json,sys; ps=json.load(sys.stdin)["projectStatus"]; print("gate: " + ", ".join("%s=%s" % (c["metricKey"], c["status"]) for c in ps["conditions"])); bad=[c["metricKey"] for c in ps["conditions"] if c["status"]=="ERROR" and c["metricKey"]!="new_coverage"]; (print("::error::quality gate failed on: " + ", ".join(bad)) or sys.exit(1)) if bad else print("quality gate OK (new_coverage exempt per sdk#36)")'
