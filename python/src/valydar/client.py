@@ -18,6 +18,8 @@ from .types import (
     VerificationResponse,
 )
 
+_IMAGE_JPEG = "image/jpeg"
+
 
 class ValydarError(Exception):
     def __init__(self, status_code: int, code: str, message: str) -> None:
@@ -103,7 +105,7 @@ class ValydarClient:
     ) -> DocumentUploadResponse:
         path = Path(image_path)
         files: dict[str, Any] = {
-            "file": (path.name, path.read_bytes(), "image/jpeg"),
+            "file": (path.name, path.read_bytes(), _IMAGE_JPEG),
         }
         if document_type:
             files["document_type"] = (None, document_type)
@@ -121,7 +123,7 @@ class ValydarClient:
     ) -> dict[str, Any]:
         path = Path(image_path)
         files: dict[str, Any] = {
-            "file": (path.name, path.read_bytes(), "image/jpeg"),
+            "file": (path.name, path.read_bytes(), _IMAGE_JPEG),
         }
         resp = self._client.post(
             urljoin(str(self._client.base_url), f"/verifications/{verification_id}/selfie"),
@@ -216,11 +218,11 @@ class ValydarClient:
     ) -> dict[str, Any]:
         doc = Path(document_path)
         files: dict[str, Any] = {
-            "document": (doc.name, doc.read_bytes(), "image/jpeg"),
+            "document": (doc.name, doc.read_bytes(), _IMAGE_JPEG),
         }
         if selfie_path is not None:
             selfie = Path(selfie_path)
-            files["selfie"] = (selfie.name, selfie.read_bytes(), "image/jpeg")
+            files["selfie"] = (selfie.name, selfie.read_bytes(), _IMAGE_JPEG)
         if checks:
             files["checks"] = (None, ",".join(checks))
         resp = self._client.post(
