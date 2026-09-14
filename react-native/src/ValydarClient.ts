@@ -7,8 +7,8 @@ import type {
 } from './types';
 
 export class ValydarClient {
-  private apiKey: string;
-  private baseUrl: string;
+  private readonly apiKey: string;
+  private readonly baseUrl: string;
 
   constructor(config: ValydarConfig) {
     this.apiKey = config.apiKey;
@@ -29,10 +29,15 @@ export class ValydarClient {
       headers['Content-Type'] = 'application/json';
     }
 
+    let payload: string | FormData | undefined;
+    if (body) {
+      payload = isFormData ? body : JSON.stringify(body);
+    }
+
     const res = await fetch(`${this.baseUrl}${path}`, {
       method,
       headers,
-      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
+      body: payload,
     });
 
     if (!res.ok) {

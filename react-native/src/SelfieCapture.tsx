@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import type { SelfieCaptureProps, LivenessResult } from './types';
+import type { SelfieCaptureProps } from './types';
 import { ValydarClient } from './ValydarClient';
 
 type Phase = 'framing' | 'capturing' | 'uploading' | 'complete' | 'error';
