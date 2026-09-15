@@ -22,6 +22,9 @@ public class ValydarClient implements AutoCloseable {
     private static final String BOUNDARY_PREFIX = "----boundary";
     private static final String MULTIPART_BOUNDARY = "multipart/form-data; boundary=";
 
+    /** Default API endpoint used when no explicit base URL is supplied. */
+    public static final String DEFAULT_BASE_URL = "https://api.dev.valydar.com";
+
     private final HttpClient http;
     private final String baseUrl;
     private final String apiKey;
@@ -29,7 +32,7 @@ public class ValydarClient implements AutoCloseable {
 
     public ValydarClient(String apiKey, String baseUrl) {
         this.apiKey = apiKey;
-        this.baseUrl = baseUrl != null ? baseUrl : "https://api.dev.valydar.com";
+        this.baseUrl = baseUrl != null ? baseUrl : DEFAULT_BASE_URL;
         this.http = HttpClient.newBuilder().build();
         this.mapper = new ObjectMapper();
     }
