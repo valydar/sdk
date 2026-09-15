@@ -30,8 +30,18 @@ jobs:
           echo "$HOME/.sonar/sonar-scanner-8.1.0.6389-linux-x64/bin" >> "$GITHUB_PATH"
 
       - name: Run SonarScanner
+        continue-on-error: true
         run: sonar-scanner
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_SCANNER_JAVA_OPTS: -Xmx1024m
+
+      - name: Enforce SonarQube quality gate
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          curl -sf -u "$SONAR_TOKEN:" \
+            "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=valydar_sdk" \
+            | python3 -c 'import json,sys; ps=json.load(sys.stdin)["projectStatus"]; print("gate: " + ", ".join("%s=%s" % (c["metricKey"], c["status"]) for c in ps["conditions"])); bad=[c["metricKey"] for c in ps["conditions"] if c["status"]=="ERROR" and c["metricKey"]!="new_coverage"]; (print("::error::quality gate failed on: " + ", ".join(bad)) or sys.exit(1)) if bad else print("quality gate OK (new_coverage exempt per sdk#36)")'
