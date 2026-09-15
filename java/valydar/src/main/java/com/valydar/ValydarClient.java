@@ -17,8 +17,8 @@ public class ValydarClient implements AutoCloseable {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String APPLICATION_JSON = "application/json";
     private static final String IMAGE_JPEG = "image/jpeg";
-    private static final String VERIFICATIONS_ROOT = "/verifications";
-    private static final String VERIFICATIONS_PATH = "/verifications/";
+    private static final String VERIFICATIONS_ROOT = "/verifications"; // NOSONAR - API path, not configurable
+    private static final String VERIFICATIONS_PATH = "/verifications/"; // NOSONAR - API path, not configurable
     private static final String BOUNDARY_PREFIX = "----boundary";
     private static final String MULTIPART_BOUNDARY = "multipart/form-data; boundary=";
 
