@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-val okhttpVersion = "4.12.0"
+val okhttpVersion = "5.5.0"
 val kotlinxSerializationVersion = "1.6.0"
 val androidxCameraVersion = "1.3.0"
 
