@@ -9,28 +9,28 @@
     body{font-family:-apple-system,BlinkMacSystemFont,"Inter",sans-serif;background:#0f172a;color:#ffffff;line-height:1.5}
     .top{background:#1e293b;border-bottom:1px solid #475569;padding:16px 24px;display:flex;align-items:center;gap:12px}
     .top h1{font-size:18px;font-weight:700;color:#ffffff}
-    .top span{font-size:12px;color:#e2e8f0;background:#334155;padding:2px 8px;border-radius:4px}
-    .top .badge{background:#6366f1;color:#fff;font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;margin-left:auto}
+    .top span{font-size:12px;color:#ffffff;background:#334155;padding:2px 8px;border-radius:4px}
+    .top .badge{background:#4f46e5;color:#ffffff;font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;margin-left:auto}
     .layout{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
     @media(max-width:768px){.layout{grid-template-columns:1fr}}
     .cfg{grid-column:1/-1;background:#1e293b;border-radius:12px;padding:20px;display:flex;gap:16px;align-items:end;flex-wrap:wrap;border:1px solid #475569}
     .cfg label{font-size:12px;font-weight:600;color:#ffffff;display:block;margin-bottom:4px}
     .cfg input{background:#0f172a;border:1px solid #475569;border-radius:8px;padding:8px 12px;color:#ffffff;font-size:13px;width:280px}
     .cfg input:focus{outline:none;border-color:#818cf8}
-    .cfg .btn{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-    .cfg .btn:hover{background:#4f46e5}
+    .cfg .btn{background:#4f46e5;color:#ffffff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+    .cfg .btn:hover{background:#4338ca}
     .card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #475569}
     .card h2{font-size:14px;font-weight:600;color:#ffffff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
     .card h2 .icon{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
-    .card p{font-size:13px;color:#e2e8f0;margin-bottom:16px}
-    .card .btn{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-    .card .btn:hover{background:#4f46e5}
-    .card .btn:disabled{background:#334155;color:#cbd5e1;cursor:not-allowed}
+    .card p{font-size:13px;color:#ffffff;margin-bottom:16px}
+    .card .btn{background:#4f46e5;color:#ffffff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+    .card .btn:hover{background:#4338ca}
+    .card .btn:disabled{background:#334155;color:#ffffff;cursor:not-allowed}
     .card .btn-sm{padding:6px 12px;font-size:11px}
-    .card .btn-success{background:#22c55e}
-    .card .btn-success:hover{background:#16a34a}
-    .card .btn-danger{background:#ef4444}
-    .card .btn-danger:hover{background:#dc2626}
+    .card .btn-success{background:#15803d}
+    .card .btn-success:hover{background:#166534}
+    .card .btn-danger{background:#b91c1c}
+    .card .btn-danger:hover{background:#991b1b}
     .card .btn-outline{background:transparent;border:1px solid #475569;color:#ffffff}
     .card .btn-outline:hover{border-color:#818cf8;color:#ffffff}
     .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
@@ -38,12 +38,12 @@
     .tag-red{background:#450a0a;color:#fca5a5}
     .tag-yellow{background:#451a03;color:#fdba74}
     .tag-blue{background:#1e1b4b;color:#a5b4fc}
-    .log{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:400px;overflow-y:auto;white-space:pre-wrap;color:#a5f3fc;margin-top:12px}
-    .log .dim{color:#cbd5e1}
+    .log{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:400px;overflow-y:auto;white-space:pre-wrap;color:#ffffff;margin-top:12px}
+    .log .dim{color:#ffffff}
     .log .ok{color:#86efac}
     .log .err{color:#fca5a5}
     .log .hl{color:#c4b5fd}
-    .dump{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:200px;overflow-y:auto;white-space:pre-wrap;color:#a5f3fc;margin-top:8px}
+    .dump{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:200px;overflow-y:auto;white-space:pre-wrap;color:#ffffff;margin-top:8px}
     .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     input[type="text"],input[type="password"],select{background:#0f172a;border:1px solid #475569;border-radius:6px;padding:6px 10px;color:#ffffff;font-size:12px;width:100%}
     select{width:auto}
@@ -78,8 +78,9 @@
       <p>Start a verification with the checks you want to run.</p>
       <div class="grid2">
         <div><label for="client-ref" style="font-size:11px;color:#ffffff">Client Ref</label><input id="client-ref" value="demo-{{RANDOM}}" aria-label="Client Reference"></div>
-        <div><span style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Checks</span>
-          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+        <div>
+          <label id="checks-label" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Checks</label>
+          <div role="group" aria-labelledby="checks-label" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
             <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-document"> document</label>
             <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-face_match"> face_match</label>
             <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-liveness"> liveness</label>
@@ -103,7 +104,7 @@
       </select>
       <label for="doc-file" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Document File</label>
       <input type="file" accept="image/*" id="doc-file" aria-label="Document File" style="margin-bottom:8px">
-      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" alt="Document preview" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" src="" alt="Document preview image for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
       <div class="row">
         <button class="btn" id="doc-submit" disabled>Upload Document</button>
         <button class="btn btn-outline" id="doc-capture-btn">📷 Capture from Camera</button>
@@ -116,7 +117,7 @@
       <p>Upload a selfie for face matching and liveness.</p>
       <label for="sfl-file" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Selfie File</label>
       <input type="file" accept="image/*" id="sfl-file" aria-label="Selfie File" style="margin-bottom:8px">
-      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" alt="Selfie preview" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" src="" alt="Selfie preview image for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
       <div class="row">
         <button class="btn" id="sfl-submit" disabled>Upload Selfie</button>
         <button class="btn btn-outline" id="sfl-capture-btn">📷 Take Selfie</button>
@@ -507,7 +508,7 @@
     }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
   });
 
-  // ── WASM Auto-init ──────────────────────────────────────────────────────
+  // ── WASM Auto-init ────────────────────────────────----------------──────
 
   if (typeof ValydarWasm !== 'undefined' && ValydarWasm.default) {
     ValydarWasm.default().then(function() {
