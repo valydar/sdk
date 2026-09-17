@@ -22,7 +22,7 @@
     .card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #475569}
     .card h2{font-size:14px;font-weight:600;color:#ffffff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
     .card h2 .icon{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
-    .card p{font-size:13px;color:#ffffff;margin-bottom:16px}
+    .card p{font-size:13px;color:#e2e8f0;margin-bottom:16px}
     .card .btn{background:#4f46e5;color:#ffffff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
     .card .btn:hover{background:#4338ca}
     .card .btn:disabled{background:#334155;color:#ffffff;cursor:not-allowed}
@@ -57,11 +57,11 @@
   </style>
 </head>
 <body>
-<div class="top" role="banner">
+<header class="top">
   <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#6366f1"/><path d="M8 16l5 5 11-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <h1>Valydar <span>Full Feature Demo</span></h1>
   <span class="badge">v0.1.0</span>
-</div>
+</header>
 
 <main class="layout" role="main">
   <div class="cfg">
@@ -79,14 +79,16 @@
       <div class="grid2">
         <div><label for="client-ref" style="font-size:11px;color:#ffffff">Client Ref</label><input id="client-ref" value="demo-{{RANDOM}}" aria-label="Client Reference"></div>
         <div>
-          <label id="checks-label" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Checks</label>
-          <div role="group" aria-labelledby="checks-label" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-document"> document</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-face_match"> face_match</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-liveness"> liveness</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-aml"> aml</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-affordability"> affordability</label>
-          </div>
+          <fieldset style="border:none;margin:0;padding:0">
+            <legend style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Checks</legend>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-document"> document</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-face_match"> face_match</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-liveness"> liveness</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-aml"> aml</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-affordability"> affordability</label>
+            </div>
+          </fieldset>
         </div>
       </div>
       <button class="btn btn-block" id="create-vid-btn">Create Verification</button>
@@ -104,7 +106,7 @@
       </select>
       <label for="doc-file" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Document File</label>
       <input type="file" accept="image/*" id="doc-file" aria-label="Document File" style="margin-bottom:8px">
-      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" src="" alt="Document preview image for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" src="" alt="Document preview for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
       <div class="row">
         <button class="btn" id="doc-submit" disabled>Upload Document</button>
         <button class="btn btn-outline" id="doc-capture-btn">📷 Capture from Camera</button>
@@ -117,7 +119,7 @@
       <p>Upload a selfie for face matching and liveness.</p>
       <label for="sfl-file" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Selfie File</label>
       <input type="file" accept="image/*" id="sfl-file" aria-label="Selfie File" style="margin-bottom:8px">
-      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" src="" alt="Selfie preview image for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" src="" alt="Selfie preview for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
       <div class="row">
         <button class="btn" id="sfl-submit" disabled>Upload Selfie</button>
         <button class="btn btn-outline" id="sfl-capture-btn">📷 Take Selfie</button>
@@ -508,7 +510,7 @@
     }).catch(function(e) { log('Error: ' + e.message, null, 'err'); });
   });
 
-  // ── WASM Auto-init ────────────────────────────────----------------──────
+  // ── WASM Auto-init ──────────────────────────────────────────────────────
 
   if (typeof ValydarWasm !== 'undefined' && ValydarWasm.default) {
     ValydarWasm.default().then(function() {
