@@ -6,69 +6,69 @@
   <title>Valydar — Full Feature Demo</title>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Inter",sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.5}
-    .top{background:#1e293b;border-bottom:1px solid #334155;padding:16px 24px;display:flex;align-items:center;gap:12px}
-    .top h1{font-size:18px;font-weight:700;color:#f8fafc}
-    .top span{font-size:12px;color:#94a3b8;background:#334155;padding:2px 8px;border-radius:4px}
-    .top .badge{background:#6366f1;color:#fff;font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;margin-left:auto}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Inter",sans-serif;background:#0f172a;color:#ffffff;line-height:1.5}
+    .top{background:#1e293b;border-bottom:1px solid #475569;padding:16px 24px;display:flex;align-items:center;gap:12px}
+    .top h1{font-size:18px;font-weight:700;color:#ffffff}
+    .top span{font-size:12px;color:#ffffff;background:#334155;padding:2px 8px;border-radius:4px}
+    .top .badge{background:#4f46e5;color:#ffffff;font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;margin-left:auto}
     .layout{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
     @media(max-width:768px){.layout{grid-template-columns:1fr}}
-    .cfg{grid-column:1/-1;background:#1e293b;border-radius:12px;padding:20px;display:flex;gap:16px;align-items:end;flex-wrap:wrap;border:1px solid #334155}
-    .cfg label{font-size:12px;font-weight:600;color:#94a3b8;display:block;margin-bottom:4px}
-    .cfg input{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 12px;color:#e2e8f0;font-size:13px;width:280px}
-    .cfg input:focus{outline:none;border-color:#6366f1}
-    .cfg .btn{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-    .cfg .btn:hover{background:#4f46e5}
-    .card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #334155}
-    .card h2{font-size:14px;font-weight:600;color:#f8fafc;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .cfg{grid-column:1/-1;background:#1e293b;border-radius:12px;padding:20px;display:flex;gap:16px;align-items:end;flex-wrap:wrap;border:1px solid #475569}
+    .cfg label{font-size:12px;font-weight:600;color:#ffffff;display:block;margin-bottom:4px}
+    .cfg input{background:#0f172a;border:1px solid #475569;border-radius:8px;padding:8px 12px;color:#ffffff;font-size:13px;width:280px}
+    .cfg input:focus{outline:none;border-color:#818cf8}
+    .cfg .btn{background:#4f46e5;color:#ffffff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+    .cfg .btn:hover{background:#4338ca}
+    .card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #475569}
+    .card h2{font-size:14px;font-weight:600;color:#ffffff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
     .card h2 .icon{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
-    .card p{font-size:13px;color:#94a3b8;margin-bottom:16px}
-    .card .btn{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-    .card .btn:hover{background:#4f46e5}
-    .card .btn:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+    .card p{font-size:13px;color:#e2e8f0;margin-bottom:16px}
+    .card .btn{background:#4f46e5;color:#ffffff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+    .card .btn:hover{background:#4338ca}
+    .card .btn:disabled{background:#334155;color:#ffffff;cursor:not-allowed}
     .card .btn-sm{padding:6px 12px;font-size:11px}
-    .card .btn-success{background:#22c55e}
-    .card .btn-success:hover{background:#16a34a}
-    .card .btn-danger{background:#ef4444}
-    .card .btn-danger:hover{background:#dc2626}
-    .card .btn-outline{background:transparent;border:1px solid #334155;color:#94a3b8}
-    .card .btn-outline:hover{border-color:#6366f1;color:#e2e8f0}
+    .card .btn-success{background:#15803d}
+    .card .btn-success:hover{background:#166534}
+    .card .btn-danger{background:#b91c1c}
+    .card .btn-danger:hover{background:#991b1b}
+    .card .btn-outline{background:transparent;border:1px solid #475569;color:#ffffff}
+    .card .btn-outline:hover{border-color:#818cf8;color:#ffffff}
     .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
     .tag-green{background:#052e16;color:#86efac}
     .tag-red{background:#450a0a;color:#fca5a5}
     .tag-yellow{background:#451a03;color:#fdba74}
     .tag-blue{background:#1e1b4b;color:#a5b4fc}
-    .log{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:400px;overflow-y:auto;white-space:pre-wrap;color:#a5f3fc;margin-top:12px}
-    .log .dim{color:#475569}
+    .log{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:400px;overflow-y:auto;white-space:pre-wrap;color:#ffffff;margin-top:12px}
+    .log .dim{color:#ffffff}
     .log .ok{color:#86efac}
     .log .err{color:#fca5a5}
     .log .hl{color:#c4b5fd}
-    .dump{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:200px;overflow-y:auto;white-space:pre-wrap;color:#a5f3fc;margin-top:8px}
+    .dump{background:#0f172a;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;max-height:200px;overflow-y:auto;white-space:pre-wrap;color:#ffffff;margin-top:8px}
     .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    input[type="text"],input[type="password"],select{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:6px 10px;color:#e2e8f0;font-size:12px;width:100%}
+    input[type="text"],input[type="password"],select{background:#0f172a;border:1px solid #475569;border-radius:6px;padding:6px 10px;color:#ffffff;font-size:12px;width:100%}
     select{width:auto}
-    input:focus,select:focus{outline:none;border-color:#6366f1}
+    input:focus,select:focus{outline:none;border-color:#818cf8}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
     .stat{display:flex;justify-content:space-between;padding:8px 12px;background:#0f172a;border-radius:6px;font-size:12px}
-    .stat .val{font-weight:600;color:#f8fafc}
+    .stat .val{font-weight:600;color:#ffffff}
     .warn{background:#451a03;border:1px solid #78350f;border-radius:6px;padding:8px 12px;font-size:11px;color:#fdba74;margin-bottom:12px}
     .res{display:none;margin-top:12px}
     .res.show{display:block}
   </style>
 </head>
 <body>
-<div class="top">
+<header class="top">
   <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#6366f1"/><path d="M8 16l5 5 11-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <h1>Valydar <span>Full Feature Demo</span></h1>
   <span class="badge">v0.1.0</span>
-</div>
+</header>
 
-<div class="layout">
+<main class="layout" role="main">
   <div class="cfg">
-    <div><label>API URL</label><input id="api-url" value="https://api.dev.valydar.com"></div>
-    <div><label>API Key</label><input id="api-key" type="password" placeholder="your-api-key"></div>
+    <div><label for="api-url">API URL</label><input id="api-url" value="https://api.dev.valydar.com" aria-label="API URL"></div>
+    <div><label for="api-key">API Key</label><input id="api-key" type="password" placeholder="your-api-key" aria-label="API Key"></div>
     <button class="btn" id="init-btn">Initialize SDK</button>
-    <span id="init-status" style="font-size:12px;color:#94a3b8"></span>
+    <span id="init-status" style="font-size:12px;color:#ffffff"></span>
   </div>
 
   <!-- Column 1: Verification Flow -->
@@ -77,15 +77,18 @@
       <h2><span class="icon" style="background:#1e1b4b">1</span> Create Verification</h2>
       <p>Start a verification with the checks you want to run.</p>
       <div class="grid2">
-        <div><label style="font-size:11px;color:#94a3b8">Client Ref</label><input id="client-ref" value="demo-{{RANDOM}}"></div>
-        <div><label style="font-size:11px;color:#94a3b8">Checks</label>
-          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-document"> document</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-face_match"> face_match</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-liveness"> liveness</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-aml"> aml</label>
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-affordability"> affordability</label>
-          </div>
+        <div><label for="client-ref" style="font-size:11px;color:#ffffff">Client Ref</label><input id="client-ref" value="demo-{{RANDOM}}" aria-label="Client Reference"></div>
+        <div>
+          <fieldset style="border:none;margin:0;padding:0">
+            <legend style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Checks</legend>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-document"> document</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-face_match"> face_match</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-liveness"> liveness</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" checked id="chk-aml"> aml</label>
+              <label style="font-size:11px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="chk-affordability"> affordability</label>
+            </div>
+          </fieldset>
         </div>
       </div>
       <button class="btn btn-block" id="create-vid-btn">Create Verification</button>
@@ -95,13 +98,15 @@
     <div class="card" style="margin-bottom:16px">
       <h2><span class="icon" style="background:#1e1b4b">2</span> Document Upload</h2>
       <p>Upload a passport, ID card, or driver's license.</p>
-      <select id="doc-type" style="margin-bottom:8px">
+      <label for="doc-type" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Document Type</label>
+      <select id="doc-type" aria-label="Document Type" style="margin-bottom:8px">
         <option value="passport">Passport</option>
         <option value="national_id">National ID</option>
         <option value="drivers_license">Driver's License</option>
       </select>
-      <input type="file" accept="image/*" id="doc-file" style="margin-bottom:8px">
-      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <label for="doc-file" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Document File</label>
+      <input type="file" accept="image/*" id="doc-file" aria-label="Document File" style="margin-bottom:8px">
+      <div id="doc-preview" style="display:none;margin-bottom:8px"><img id="doc-preview-img" src="" alt="Document preview for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
       <div class="row">
         <button class="btn" id="doc-submit" disabled>Upload Document</button>
         <button class="btn btn-outline" id="doc-capture-btn">📷 Capture from Camera</button>
@@ -112,8 +117,9 @@
     <div class="card" style="margin-bottom:16px">
       <h2><span class="icon" style="background:#1e1b4b">3</span> Selfie Upload</h2>
       <p>Upload a selfie for face matching and liveness.</p>
-      <input type="file" accept="image/*" id="sfl-file" style="margin-bottom:8px">
-      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" style="max-width:100%;max-height:150px;border-radius:6px"></div>
+      <label for="sfl-file" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Selfie File</label>
+      <input type="file" accept="image/*" id="sfl-file" aria-label="Selfie File" style="margin-bottom:8px">
+      <div id="sfl-preview" style="display:none;margin-bottom:8px"><img id="sfl-preview-img" src="" alt="Selfie preview for verification" style="max-width:100%;max-height:150px;border-radius:6px"></div>
       <div class="row">
         <button class="btn" id="sfl-submit" disabled>Upload Selfie</button>
         <button class="btn btn-outline" id="sfl-capture-btn">📷 Take Selfie</button>
@@ -139,7 +145,8 @@
     <div class="card" style="margin-bottom:16px">
       <h2><span class="icon" style="background:#1e1b4b">AML</span> On-Device AML Screening (WASM)</h2>
       <p>Run sanctions and PEP screening directly in the browser — no upload needed.</p>
-      <input type="text" id="aml-name" value="Vladimir Putin" placeholder="Enter a name to screen">
+      <label for="aml-name" style="font-size:11px;color:#ffffff;display:block;margin-bottom:4px">Name to Screen</label>
+      <input type="text" id="aml-name" value="Vladimir Putin" placeholder="Enter a name to screen" aria-label="AML Screening Name">
       <div class="row" style="margin-top:8px">
         <button class="btn" id="aml-btn">Screen Name</button>
       </div>
@@ -150,12 +157,12 @@
       <h2><span class="icon" style="background:#1e1b4b">€</span> Affordability Check</h2>
       <p>Estimate disposable income for player protection.</p>
       <div class="grid2">
-        <div><label style="font-size:11px;color:#94a3b8">Monthly Income (€)</label><input type="number" id="aff-income" value="5000"></div>
-        <div><label style="font-size:11px;color:#94a3b8">Monthly Expenses (€)</label><input type="number" id="aff-expenses" value="2000"></div>
-        <div><label style="font-size:11px;color:#94a3b8">Country</label>
-          <select id="aff-country"><option value="NL">Netherlands</option><option value="DE">Germany</option><option value="UK">UK</option><option value="US">US</option><option value="CH">Switzerland</option><option value="SE">Sweden</option></select>
+        <div><label for="aff-income" style="font-size:11px;color:#ffffff">Monthly Income (€)</label><input type="number" id="aff-income" value="5000" aria-label="Monthly Income"></div>
+        <div><label for="aff-expenses" style="font-size:11px;color:#ffffff">Monthly Expenses (€)</label><input type="number" id="aff-expenses" value="2000" aria-label="Monthly Expenses"></div>
+        <div><label for="aff-country" style="font-size:11px;color:#ffffff">Country</label>
+          <select id="aff-country" aria-label="Country"><option value="NL">Netherlands</option><option value="DE">Germany</option><option value="UK">UK</option><option value="US">US</option><option value="CH">Switzerland</option><option value="SE">Sweden</option></select>
         </div>
-        <div><label style="font-size:11px;color:#94a3b8">Dependents</label><input type="number" id="aff-dependents" value="0" min="0"></div>
+        <div><label for="aff-dependents" style="font-size:11px;color:#ffffff">Dependents</label><input type="number" id="aff-dependents" value="0" min="0" aria-label="Dependents"></div>
       </div>
       <button class="btn" id="aff-btn">Check Affordability</button>
       <div class="res" id="aff-result"><div class="dump" id="aff-dump"></div></div>
@@ -175,8 +182,8 @@
       <h2><span class="icon" style="background:#1e1b4b">📋</span> Multi-Spectral Check</h2>
       <p>Upload UV/IR images for hardware security verification.</p>
       <div class="grid2">
-        <div><label style="font-size:11px;color:#94a3b8">UV Image</label><input type="file" accept="image/*" id="uv-file"></div>
-        <div><label style="font-size:11px;color:#94a3b8">IR Image</label><input type="file" accept="image/*" id="ir-file"></div>
+        <div><label for="uv-file" style="font-size:11px;color:#ffffff">UV Image</label><input type="file" accept="image/*" id="uv-file" aria-label="UV Image File"></div>
+        <div><label for="ir-file" style="font-size:11px;color:#ffffff">IR Image</label><input type="file" accept="image/*" id="ir-file" aria-label="IR Image File"></div>
       </div>
       <button class="btn" id="ms-btn" disabled>Run Multi-Spectral Check</button>
       <div class="res" id="ms-result"><div class="dump" id="ms-dump"></div></div>
@@ -187,7 +194,7 @@
       <div class="log" id="api-log"><span class="dim">Ready. Initialize SDK to begin.</span></div>
     </div>
   </div>
-</div>
+</main>
 
 <script src="/sdk/valydar.js"></script>
 <script src="/sdk/document-capture.js"></script>
