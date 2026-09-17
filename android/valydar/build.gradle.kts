@@ -4,7 +4,7 @@ plugins {
 }
 
 val okhttpVersion = "4.12.0"
-val kotlinxSerializationVersion = "1.6.0"
+val kotlinxSerializationVersion = "1.11.0"
 val androidxCameraVersion = "1.3.0"
 
 android {
