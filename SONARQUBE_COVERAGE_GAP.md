@@ -44,8 +44,9 @@ Registered components: `android`, `csharp/Valydar`, `java`, `python`, `react-nat
 
 1. **Install Dart plugin** in SonarQube Community Build (SonarDart or compatible) to enable Flutter analysis
 2. **Install Swift plugin** in SonarQube Community Build (SonarSwift or compatible) to enable iOS analysis
-3. **Install .NET SDK** on the ARC runner image to enable `dotnet build -warnaserror` for C# analysis
-4. **Install Dart SDK** on the ARC runner image to enable `dart analyze --fatal-infos`
+3. **Switch the Sonar workflow to SonarScanner for .NET** and run a real `dotnet build` for `csharp/Valydar`; installing the .NET SDK alone is not sufficient with the current CLI-only scanner setup
+4. **Install .NET SDK** on the ARC runner image so the workflow can run the required `dotnet build -warnaserror` step for C# analysis
+5. **Install Dart SDK** on the ARC runner image to enable `dart analyze --fatal-infos`
 
 ## Per PM Pre-Approved Plan (sdk#21)
 
