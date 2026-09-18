@@ -2,7 +2,10 @@ name: Publish Java SDK
 
 on:
   push:
+    branches: [main, dev]
     tags: ["sdk-v*"]
+  pull_request:
+    branches: [main, dev]
 
 jobs:
   publish-maven:
@@ -20,7 +23,12 @@ jobs:
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
 
+      - name: Build and test (dry-run)
+        working-directory: java
+        run: mvn -B clean test compile
+
       - name: Set version from tag
+        if: startsWith(github.ref, 'refs/tags/sdk-v')
         working-directory: java
         run: |
           VERSION="${{ github.ref_name }}"
@@ -28,6 +36,7 @@ jobs:
           mvn -B versions:set -DnewVersion=$VERSION -DprocessAllModules
 
       - name: Deploy to Maven Central
+        if: startsWith(github.ref, 'refs/tags/sdk-v')
         working-directory: java
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

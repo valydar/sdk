@@ -7,6 +7,7 @@
     <Description>Valydar Identity Verification API client for .NET</Description>
     <Authors>Valydar</Authors>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
